@@ -21,7 +21,6 @@ MoodNote _$MoodNoteFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$MoodNote {
   String get id => throw _privateConstructorUsedError;
-  DateTime get data => throw _privateConstructorUsedError;
   Map<String, List<String>> get emotions => throw _privateConstructorUsedError;
   int get stressLevel => throw _privateConstructorUsedError;
   int get selfAssessment => throw _privateConstructorUsedError;
@@ -40,7 +39,6 @@ abstract class $MoodNoteCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      DateTime data,
       Map<String, List<String>> emotions,
       int stressLevel,
       int selfAssessment,
@@ -61,7 +59,6 @@ class _$MoodNoteCopyWithImpl<$Res, $Val extends MoodNote>
   @override
   $Res call({
     Object? id = null,
-    Object? data = null,
     Object? emotions = null,
     Object? stressLevel = null,
     Object? selfAssessment = null,
@@ -72,10 +69,6 @@ class _$MoodNoteCopyWithImpl<$Res, $Val extends MoodNote>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as DateTime,
       emotions: null == emotions
           ? _value.emotions
           : emotions // ignore: cast_nullable_to_non_nullable
@@ -106,7 +99,6 @@ abstract class _$$MoodNoteImplCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
-      DateTime data,
       Map<String, List<String>> emotions,
       int stressLevel,
       int selfAssessment,
@@ -125,7 +117,6 @@ class __$$MoodNoteImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? data = null,
     Object? emotions = null,
     Object? stressLevel = null,
     Object? selfAssessment = null,
@@ -136,10 +127,6 @@ class __$$MoodNoteImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as DateTime,
       emotions: null == emotions
           ? _value._emotions
           : emotions // ignore: cast_nullable_to_non_nullable
@@ -165,7 +152,6 @@ class __$$MoodNoteImplCopyWithImpl<$Res>
 class _$MoodNoteImpl with DiagnosticableTreeMixin implements _MoodNote {
   _$MoodNoteImpl(
       {required this.id,
-      required this.data,
       required final Map<String, List<String>> emotions,
       required this.stressLevel,
       required this.selfAssessment,
@@ -177,8 +163,6 @@ class _$MoodNoteImpl with DiagnosticableTreeMixin implements _MoodNote {
 
   @override
   final String id;
-  @override
-  final DateTime data;
   final Map<String, List<String>> _emotions;
   @override
   Map<String, List<String>> get emotions {
@@ -196,7 +180,7 @@ class _$MoodNoteImpl with DiagnosticableTreeMixin implements _MoodNote {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'MoodNote(id: $id, data: $data, emotions: $emotions, stressLevel: $stressLevel, selfAssessment: $selfAssessment, note: $note)';
+    return 'MoodNote(id: $id, emotions: $emotions, stressLevel: $stressLevel, selfAssessment: $selfAssessment, note: $note)';
   }
 
   @override
@@ -205,7 +189,6 @@ class _$MoodNoteImpl with DiagnosticableTreeMixin implements _MoodNote {
     properties
       ..add(DiagnosticsProperty('type', 'MoodNote'))
       ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('data', data))
       ..add(DiagnosticsProperty('emotions', emotions))
       ..add(DiagnosticsProperty('stressLevel', stressLevel))
       ..add(DiagnosticsProperty('selfAssessment', selfAssessment))
@@ -218,7 +201,6 @@ class _$MoodNoteImpl with DiagnosticableTreeMixin implements _MoodNote {
         (other.runtimeType == runtimeType &&
             other is _$MoodNoteImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.data, data) || other.data == data) &&
             const DeepCollectionEquality().equals(other._emotions, _emotions) &&
             (identical(other.stressLevel, stressLevel) ||
                 other.stressLevel == stressLevel) &&
@@ -232,7 +214,6 @@ class _$MoodNoteImpl with DiagnosticableTreeMixin implements _MoodNote {
   int get hashCode => Object.hash(
       runtimeType,
       id,
-      data,
       const DeepCollectionEquality().hash(_emotions),
       stressLevel,
       selfAssessment,
@@ -255,7 +236,6 @@ class _$MoodNoteImpl with DiagnosticableTreeMixin implements _MoodNote {
 abstract class _MoodNote implements MoodNote {
   factory _MoodNote(
       {required final String id,
-      required final DateTime data,
       required final Map<String, List<String>> emotions,
       required final int stressLevel,
       required final int selfAssessment,
@@ -266,8 +246,6 @@ abstract class _MoodNote implements MoodNote {
 
   @override
   String get id;
-  @override
-  DateTime get data;
   @override
   Map<String, List<String>> get emotions;
   @override

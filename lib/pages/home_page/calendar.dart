@@ -7,7 +7,7 @@ import 'package:mood_diary/models/mood_note.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../states/mood_notes.dart';
 
-final moodNotesProvider = NotifierProvider<MoodNotes,List<MoodNote>>(MoodNotes.new);
+final moodNotesProvider = NotifierProvider< MoodNotes, LinkedHashMap<DateTime,MoodNote> >(MoodNotes.new);
 
 class Calendar extends StatefulWidget {
   const Calendar({super.key});
@@ -70,7 +70,7 @@ class _CalendarState extends State<Calendar> {
                 isToday,
               }) {
                 Widget? dayWidget;
-                if (_isDotsForDay(date,ref)) {
+                if (ref.read(moodNotesProvider).keys.contains(date)) {
                   dayWidget = Container(
                     decoration: decoration,
                     child: Center(
@@ -112,20 +112,6 @@ class _CalendarState extends State<Calendar> {
       }),
     );
   }
-
-   bool _isDotsForDay(DateTime day,WidgetRef ref) {
-    List<MoodNote> listMN = ref.read(moodNotesProvider);
-    var hm = LinkedHashMap<DateTime,bool>(
-        equals: isSameDay
-    );
-    for (var item in listMN) {
-      hm.addAll({item.data: true} );
-    }
-    return hm[day] ?? false;
-
-  }
-
 }
 
-bool isSameDay(DateTime d1, DateTime d2) => (d1.day == d2.day && d1.month == d2.month && d1.year == d2.year);
 
