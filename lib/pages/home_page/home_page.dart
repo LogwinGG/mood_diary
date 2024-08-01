@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
 import 'package:mood_diary/pages/home_page/calendar.dart';
-
-import 'mood_diary_tab/mood_diary_tab.dart';
+import 'mood_note_tab/mood_note_tab.dart';
 import 'statistics_tab/statistics_tab.dart';
 
-String date({DateTime? d}) => DateFormat('E, d MMMM H:m','ru').format(d?? DateTime.now());
+
+String date(DateTime? d) {
+  d ??= DateTime.now();
+  return DateFormat('E, d MMMM', 'ru').format(d);
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,14 +19,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedTabIndex = 0;
-
+  double heightP = 0.05;
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(date() ),
+        title: Consumer(builder: (context, ref, child) {
+          return Text(date(ref.watch(selectDateProvider)[0]) );
+          },),
         centerTitle: true,
         actions: [
           IconButton(
@@ -32,45 +36,87 @@ class _HomePageState extends State<HomePage> {
                   MaterialPageRoute(builder: (context) => const Calendar())
                 );
               },
-              icon: const Icon(Icons.calendar_month))
+              icon: const Icon(Icons.calendar_month),iconSize: 35,)
         ],
       ),
       body:  SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Center(
-              child: FlutterToggleTab(
-                width: 80, // width in percent
-                borderRadius: 17,
-                height: 34,
-                selectedIndex: _selectedTabIndex,
-                selectedBackgroundColors: [Colors.orange.shade600, Colors.orange.shade600],
-                selectedTextStyle: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700),
-                unSelectedTextStyle: const TextStyle(
-                    color: Colors.black38,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500),
-                labels: const ['Дневник настроения','Статистика'],
-                icons: const [Icons.book_outlined, Icons.area_chart_outlined],
-                iconSize: 15,
-                selectedLabelIndex: (i) => setState(() {_selectedTabIndex = i;}),
-                isScroll:false,
-                isShadowEnable: false,
+            const SizedBox(height: 20),
+            Center( ///Tabs
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 38),
+                child: Container(
+                  height: MediaQuery.of(context).size.height * heightP,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height * heightP/2),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          flex: _selectedTabIndex==0? 60:55,
+                          child: GestureDetector(
+                            onTap: () => { if(_selectedTabIndex!=0) setState(() => _selectedTabIndex = 0) },
+                            child: Container(
+                              height: MediaQuery.of(context).size.height * heightP,
+                              decoration: BoxDecoration(
+                                color: _selectedTabIndex == 0 ? Theme.of(context).primaryColor : Colors.transparent,
+                                borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height * heightP/2),
+                              ),
+                              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                Icon(Icons.book_outlined,color: _colorITS(0),size: _selectedTabIndex==0? 20:15 ),
+                                Text('Дневник настроения', style: _selectedTabIndex == 0 ? _styleSelectedTab : _styleUnselectedTab
+                                ),
+                              ],),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: _selectedTabIndex==1? 45:40,
+                          child: GestureDetector(
+                            onTap: () => { if(_selectedTabIndex!=1) setState(() => _selectedTabIndex = 1) },
+                            child: Container(
+                              height: MediaQuery.of(context).size.height * heightP,
+                              decoration: BoxDecoration(
+                                color: _selectedTabIndex == 1 ? Theme.of(context).primaryColor : Colors.transparent,
+                                borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height * heightP/2),
+                              ),
+                              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                Icon(Icons.area_chart_outlined,color: _colorITS(1),size: _selectedTabIndex==1? 20:15),
+                                Text('Статистика', style: _selectedTabIndex == 1 ? _styleSelectedTab : _styleUnselectedTab)
+                              ],),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 5),
-              child: _selectedTabIndex == 0?
-                const MoodDiaryTab()
+
+            _selectedTabIndex == 0?
+                const MoodNoteTab()
               : const StatisticsTab(),
-            ),
 
           ],
         )
       ),
     );
   }
+  final TextStyle _styleSelectedTab = const TextStyle(
+      color: Color.fromRGBO(240, 240, 240, 1),
+      fontSize: 13,
+      fontWeight: FontWeight.w500);
+
+  final TextStyle _styleUnselectedTab = const TextStyle(
+      color: Colors.black38,
+      fontSize: 12,
+      fontWeight: FontWeight.w500);
+
+  Color _colorITS(int tab) => tab== _selectedTabIndex ? const Color.fromRGBO(240, 240, 240, 1)
+                                               :Colors.black38;
+
 }
