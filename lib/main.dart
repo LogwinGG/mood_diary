@@ -19,10 +19,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
+          seedColor: Colors.purple.shade900,
           primary: Colors.lightBlue[800],
+          //brightness: Brightness.light
         ),
         useMaterial3: true,
+
       ),
       home: const HomePage(),
       debugShowCheckedModeBanner: false,

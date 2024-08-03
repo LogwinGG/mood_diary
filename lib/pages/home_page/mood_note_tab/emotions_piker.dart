@@ -19,7 +19,7 @@ class EmotionsPiker extends ConsumerWidget {
         children: [
           Row(
             children: [
-              const SizedBox(width: 15),
+              const SizedBox(width: 10),
 
               for (var i = 0; i < _emotionsAll.length; ++i) ...{
                 GestureDetector(
@@ -33,8 +33,8 @@ class EmotionsPiker extends ConsumerWidget {
                     ref.read(feelingsProvider.notifier).state = [];
                   },
                   child: Container(
-                      height: 140,
-                      width: 94,
+                      height: 170,
+                      width: 120,
                       decoration: BoxDecoration(
                         border: ref.watch(emotionProvider)==_emotionsAll[i]? Border.all(color: Theme.of(context).primaryColor,width: 2): null,
                         borderRadius: BorderRadius.circular(70),
@@ -50,17 +50,20 @@ class EmotionsPiker extends ConsumerWidget {
 
                       ),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Image.asset('assets/images/h${i+1}.webp',scale: 5,),
-                          Text(_emotionsAll[i] ,style: const TextStyle(fontSize: 12,color: Color.fromRGBO(21, 37, 79, 1.0))
+                          Text(_emotionsAll[i] ,style: const TextStyle(
+                            fontSize: 13,/* fontWeight: FontWeight.w600*/),
+                            softWrap: false,
+                            overflow: TextOverflow.visible
                           )],
                       )
                   ),
                 ),
-                const SizedBox(width: 10), //между карточками
+                const SizedBox(width: 8), //между карточками
               },
-              const SizedBox(width: 5), //доп.отступ послед. карточки
+              const SizedBox(width: 2), //доп.отступ послед. карточки
             ],),
           const SizedBox(height: 15),
         ],)
