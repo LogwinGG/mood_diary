@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:mood_diary/pages/home_page/home_page.dart';
 import 'package:intl/date_symbol_data_local.dart';
-void main() {
+
+void main() async{
+  await Hive.initFlutter();
+
+  await Hive.openBox('mood_notes');
   runApp(const ProviderScope(child: MyApp()));
   initializeDateFormatting('ru');
 

@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
                   },
                   icon: const Icon(Icons.calendar_month),iconSize: 35,)
               ],
-              bottom: PreferredSize(preferredSize: Size.fromHeight(34),
+              bottom: PreferredSize(preferredSize: const Size.fromHeight(34),
               child:
                     Center( ///Tabs
                       child: Padding(
