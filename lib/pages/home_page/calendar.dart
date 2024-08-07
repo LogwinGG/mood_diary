@@ -2,13 +2,13 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../states/mood_notes.dart';
+import '../../repositories/mood_notes.dart';
 
 
 DateTime d = DateTime.now();
 DateTime dateNow = DateTime(d.year, d.month, d.day);
 
-final selectDateProvider = StateProvider<List<DateTime?>>((ref) => [dateNow]);
+final selectDateProvider = StateProvider<List<DateTime>>((ref) => [dateNow]);
 
 class Calendar extends StatefulWidget {
   const Calendar({super.key});
@@ -25,9 +25,19 @@ class _CalendarState extends State<Calendar> {
     return Consumer(
       builder: (context, ref, child) {
         var moodNotes = ref.watch(moodNotesProvider);
+        var selectDate = ref.watch(selectDateProvider);
+
         return Scaffold(
             appBar: AppBar(
               actions: [
+                TextButton(
+                    onPressed: !(moodNotes.containsKey(selectDate.first))? null:
+                    () {
+                      ref.read(moodNotesProvider.notifier).remove(dateKey: selectDate.first);
+                      ref.invalidate(moodNotesProvider);
+                    },
+                    child: const Text('Удалить')),
+
                 TextButton(
                     onPressed: () {
                       ref.read(selectDateProvider.notifier).state = [dateNow];
@@ -123,6 +133,7 @@ class _CalendarState extends State<Calendar> {
               value: ref.watch(selectDateProvider),
               onValueChanged: (date) {
                 ref.read(selectDateProvider.notifier).state = date;
+
               },
             ));
       },

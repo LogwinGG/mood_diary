@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mood_diary/pages/home_page/home_page.dart';
 import 'package:mood_diary/pages/home_page/mood_note_tab/slider_component.dart';
-import '../../../states/mood_notes.dart';
+import '../../../repositories/mood_notes.dart';
 import '../calendar.dart';
 import 'emotions_piker.dart';
 import 'feelings_piker.dart';
