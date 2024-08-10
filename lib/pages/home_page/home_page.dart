@@ -20,6 +20,7 @@ class HomePage extends StatefulWidget {
 
 
 class _HomePageState extends State<HomePage> {
+
   int _selectedTabIndex = 0;
   double heightP = 0.05;
 
@@ -109,8 +110,8 @@ class _HomePageState extends State<HomePage> {
             SliverList.list(children: [
               _selectedTabIndex == 0?
                 const MoodNoteTab()
-              : const StatisticsTab(),
-            ]),],
+                :const StatisticsTab(),
+            ])],
         ),
       ),
     );
@@ -126,7 +127,7 @@ class _HomePageState extends State<HomePage> {
       fontSize: 12,
       fontWeight: FontWeight.w500);
 
-  Color _colorITS(int tab) => tab== _selectedTabIndex ? const Color.fromRGBO(240, 240, 240, 1)
+  Color _colorITS(int tab) => tab == _selectedTabIndex ? const Color.fromRGBO(240, 240, 240, 1)
                                                :Colors.black38;
 }
 
