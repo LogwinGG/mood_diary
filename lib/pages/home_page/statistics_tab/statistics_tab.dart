@@ -36,8 +36,8 @@ class _StatisticsTabState extends ConsumerState<StatisticsTab> {
     List<MapEntry<DateTime, MoodNote>> moodNotes = ref.watch(moodNotesProvider).entries.toList()
       ..sort((a,b)=> a.key.compareTo(b.key));
 
-    if (moodNotes.length >= 2 && moodNotes.length < 30 ) {
-      minDate = moodNotes.first.key ;
+    if (moodNotes.length >= 2 ) {
+      minDate = moodNotes.last.key.subtract(const Duration(days: 14)) ;
       maxDate = moodNotes.last.key ;
     } else {
       minDate = dMin;
@@ -81,7 +81,7 @@ class _StatisticsTabState extends ConsumerState<StatisticsTab> {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                     ),
-                    splineType: SplineType.cardinal,
+                    splineType: SplineType.monotonic,
                     animationDuration: 1500,
                     markerSettings: const MarkerSettings( isVisible:  true, borderWidth: 0),
                   )

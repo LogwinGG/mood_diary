@@ -10,6 +10,7 @@ void main() async{
 
   await Hive.openBox('mood_notes');
   runApp(const ProviderScope(child: MyApp()));
+
   initializeDateFormatting('ru');
 
 }

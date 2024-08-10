@@ -2,12 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mood_diary/pages/home_page/home_page.dart';
-import 'package:mood_diary/pages/home_page/mood_note_tab/slider_component.dart';
+import 'package:mood_diary/models/mood_note.dart';
+
 import '../../../repositories/mood_notes.dart';
 import '../calendar.dart';
+import '../home_page.dart';
 import 'emotions_piker.dart';
 import 'feelings_piker.dart';
+import 'slider_component.dart';
 
 
 final stressLevelProvider = StateProvider<int>((ref) => 5);
@@ -15,7 +17,16 @@ final selfAssessmentProvider = StateProvider<int>((ref) => 5);
 final feelingsProvider = StateProvider<List<String>>((ref) => []);
 final noteControler = TextEditingController();
 
+void clearData (WidgetRef ref) {
+  ref.read(emotionProvider.notifier).state = null;
+  ref.read(feelingsProvider.notifier).state = [];
+  ref.read(stressLevelProvider.notifier).state = 5;
+  ref.read(selfAssessmentProvider.notifier).state = 5;
+  noteControler.text = '';
+}
+
 class MoodNoteTab extends ConsumerStatefulWidget {
+
   const MoodNoteTab({super.key});
 
   @override
@@ -23,14 +34,33 @@ class MoodNoteTab extends ConsumerStatefulWidget {
 }
 
 class _MoodNoteTabState extends ConsumerState<MoodNoteTab> {
+  late bool isEditing;
+  MoodNote? moodNote;
+  getDitails(ref) async{
+    await Future((){
+      if(isEditing){
+        moodNote = ref.read(moodNotesProvider).entries.where((el) => el.key == ref.watch(selectDateProvider)[0]).first.value;
+        ref.read(emotionProvider.notifier).state = moodNote!.emotions.keys.first;
+        ref.read(feelingsProvider.notifier).state = moodNote!.emotions.values.first;
+        ref.read(stressLevelProvider.notifier).state = moodNote!.stressLevel;
+        ref.read(selfAssessmentProvider.notifier).state = moodNote!.selfAssessment;
+        noteControler.text = moodNote!.note;
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    isEditing = ref.read(moodNotesProvider).keys.contains(dateNow);
+    getDitails(ref);
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(moodNotesProvider, (previous, current) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Запись добавленна ${date(current.keys.last) } ')),
-      );
-    });
+    var selectedDate = ref.read(selectDateProvider)[0];
+    bool isEditing = ref.read(moodNotesProvider).keys.contains(selectedDate);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -72,49 +102,72 @@ class _MoodNoteTabState extends ConsumerState<MoodNoteTab> {
                 fillColor: Colors.white,
                 border: OutlineInputBorder(borderSide: BorderSide.none,borderRadius: BorderRadius.all(Radius.circular(10.0)) )
               ),
-              minLines: 3,
-              maxLines: 3,
+              minLines: 4,
+              maxLines: 8,
               textInputAction: TextInputAction.done,
-              onChanged: (value)=> Timer(const Duration(milliseconds: 500),()=> setState(() {}) ),
-
-
+              onChanged: (v)=> Timer(const Duration(milliseconds: 500), () => setState(() {})),
             ),
           ),
         ),
 
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 15),
-          child: FilledButton(
-              onPressed:
-                ref.watch(emotionProvider)!=null && ref.watch(feelingsProvider).isNotEmpty && noteControler.text.trim().isNotEmpty?
-                  ()=>_save(ref) : null,
-              child: const Text(
-                'Сохранить',
-                style: TextStyle(fontSize: 19),
-              )),
+          child: isEditing?
+              FilledButton( onPressed:_validate(ref) && _isCanUpdate(ref)? ()=>_update(ref) : null,
+                child: const Text('Сохранить изменения',style: TextStyle(fontSize: 19),))
+              :FilledButton(onPressed: _validate(ref)? ()=>_save(ref) : null,
+                child: const Text('Сохранить', style: TextStyle(fontSize: 19),)),
         ),
       ],
     );
   }
 
+  bool _validate(WidgetRef ref) => ref.watch(emotionProvider)!=null && ref.watch(feelingsProvider).isNotEmpty && noteControler.text.trim().isNotEmpty;
 
+  bool _isCanUpdate(WidgetRef ref) {
+      if(moodNote==null) {return false;}
+      else { return
+          ref.watch(emotionProvider) != moodNote!.emotions.keys.first ||
+          ref.watch(feelingsProvider) != moodNote!.emotions.values.first ||
+          ref.watch(stressLevelProvider) != moodNote!.stressLevel ||
+          ref.watch(selfAssessmentProvider) != moodNote!.selfAssessment ||
+          noteControler.text != moodNote!.note;
+      }
+  }
 
-  _save(WidgetRef ref) {
+  void _save(WidgetRef ref) {
+    var sDate = ref.read(selectDateProvider)[0];
     ref.read(moodNotesProvider.notifier).add(
-      date: ref.read(selectDateProvider)[0],
+      date: sDate,
       emotions: {ref.read(emotionProvider)!: ref.read(feelingsProvider)!},
       stressLevel: ref.read(stressLevelProvider),
       selfAssessment: ref.read(selfAssessmentProvider),
-      note: noteControler.text);
+      note: noteControler.text
+    );
+    clearData(ref);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Запись добавленна ${date(sDate)} ')),
+    );
+  }
 
-    ref.read(emotionProvider.notifier).state = null;
-    ref.read(feelingsProvider.notifier).state = [];
-    ref.read(stressLevelProvider.notifier).state = 5;
-    ref.read(selfAssessmentProvider.notifier).state = 5;
-    noteControler.text = '';
+  void _update(WidgetRef ref) {
+    var sDate = ref.read(selectDateProvider)[0];
+    ref.read(moodNotesProvider.notifier).update(
+        dateKey: sDate,
+        emotions: {ref.read(emotionProvider)!: ref.read(feelingsProvider)!},
+        stressLevel: ref.read(stressLevelProvider),
+        selfAssessment: ref.read(selfAssessmentProvider),
+        note: noteControler.text
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Запись обновленна ${date(sDate)} ')),
+    );
   }
 
   static const TextStyle _textStyle = TextStyle(fontSize: 17, fontWeight: FontWeight.bold);
 
   static Widget padding(Widget child) => Padding(padding: const EdgeInsets.only(left: 10,top: 30,bottom: 15),child: child,);
+
+
 }
+
