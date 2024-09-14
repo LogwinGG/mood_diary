@@ -43,6 +43,8 @@ android {
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
     }
+    flavorDimensions "default"
+
 
     buildTypes {
         release {
@@ -51,6 +53,7 @@ android {
             signingConfig = signingConfigs.debug
         }
     }
+
 }
 
 flutter {

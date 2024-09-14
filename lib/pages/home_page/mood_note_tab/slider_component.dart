@@ -30,19 +30,38 @@ class SliderComponent extends ConsumerWidget {
       ),
       child: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 25,left: 25,top: 15),
+            child: Row(
+              mainAxisAlignment:  MainAxisAlignment.spaceBetween,
+              children: [
+                for (var i = 1; i <= 6; ++i) ...{
+                  Container(
+                    height: 8,
+                    width: 2,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[400],
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  )
+
+                }
+              ],
+            ),
+          ),
           Slider(
             value: value.toDouble(),
             onChanged: ref.watch(emotionProvider)!=null?(v)=> ref.read(provider.notifier).state = v.toInt():null,
             max: 10,
-            divisions: 10,label: value.toString(),thumbColor: Colors.lightBlue[900]
-          ),//   Red(100) Blue(255) Green(70),
+            divisions: 10,label: value.toString(),
+          ),
 
           if (lableLeft!=null || lableRight!=null)
               Padding(
                 padding: const EdgeInsets.only(left: 24,right: 24, bottom: 10),
                 child: Row(mainAxisAlignment:MainAxisAlignment.spaceBetween,children: [
-                  Text(lableLeft??''),
-                  Text(lableRight??''),
+                  Text(lableLeft??'' ,style: const TextStyle(color: Colors.grey)),
+                  Text(lableRight??'',style: const TextStyle(color: Colors.grey)),
                 ],),
               )
         ]),

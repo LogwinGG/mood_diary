@@ -33,11 +33,12 @@ class EmotionsPiker extends ConsumerWidget {
                     ref.read(feelingsProvider.notifier).state = [];
                   },
                   child: Container(
-                      height: 170,
-                      width: 120,
+
+                      height: 157,
+                      width: 110,
                       decoration: BoxDecoration(
-                        border: ref.watch(emotionProvider)==_emotionsAll[i]? Border.all(color: Theme.of(context).primaryColor,width: 2): null,
-                        borderRadius: BorderRadius.circular(70),
+                        border: ref.watch(emotionProvider)==_emotionsAll[i]? Border.all(color: Theme.of(context).primaryColor,width: 3): null,
+                        borderRadius: BorderRadius.circular(76),
                         color: Colors.white,
                         boxShadow: const [
                           BoxShadow(
@@ -50,11 +51,11 @@ class EmotionsPiker extends ConsumerWidget {
 
                       ),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('assets/images/h${i+1}.webp',scale: 5,),
-                          Text(_emotionsAll[i] ,style: const TextStyle(
-                            fontSize: 13,/* fontWeight: FontWeight.w600*/),
+                          Image.asset('assets/images/z${i+1}.png',scale: 1.5,),
+                          Text(_emotionsAll[i],style: const TextStyle(
+                            fontSize: 15, color: Color(0xff4C4C69)),
                             softWrap: false,
                             overflow: TextOverflow.visible
                           )],

@@ -96,8 +96,8 @@ class _MoodNoteTabState extends ConsumerState<MoodNoteTab> {
             child: TextField(
               controller: noteControler,
               decoration: const InputDecoration(
-                hintText: 'Напишите заметку',
-                hintStyle: TextStyle(color: Colors.grey),
+                hintText: 'Введите заметку',
+                hintStyle: TextStyle(color: Color(0xffBCBCBF)),
                 filled: true,
                 fillColor: Colors.white,
                 border: OutlineInputBorder(borderSide: BorderSide.none,borderRadius: BorderRadius.all(Radius.circular(10.0)) )
@@ -164,7 +164,7 @@ class _MoodNoteTabState extends ConsumerState<MoodNoteTab> {
     );
   }
 
-  static const TextStyle _textStyle = TextStyle(fontSize: 17, fontWeight: FontWeight.bold);
+  static const TextStyle _textStyle = TextStyle(fontSize: 22, fontWeight: FontWeight.w800,color: Color(0xFF4c4c69) );
 
   static Widget padding(Widget child) => Padding(padding: const EdgeInsets.only(left: 10,top: 30,bottom: 15),child: child,);
 

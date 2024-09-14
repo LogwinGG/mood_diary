@@ -36,7 +36,7 @@ class _FeelingsPikerState extends ConsumerState<FeelingsPiker> {
               ],
             ),
             child: FilterChip(
-                label: Text(item, style: selectF.contains(item)? const TextStyle(color:  Colors.white):null,),
+                label: Text(item, style: selectF.contains(item)? const TextStyle(color:  Colors.white,fontSize: 15,fontWeight: FontWeight.w400): const TextStyle(color: Color(0xff4C4C69),fontSize: 15,fontWeight: FontWeight.w400),),
                 selected: selectF.contains(item),
                 onSelected: (bool selected){
                   setState(() {
@@ -44,6 +44,7 @@ class _FeelingsPikerState extends ConsumerState<FeelingsPiker> {
                         :ref.read(feelingsProvider.notifier).update((state) { state.remove(item); return [...state];});
                   });
                 },
+                backgroundColor: Colors.white,
                 selectedColor: Theme.of(context).primaryColor,
                 side: BorderSide.none,showCheckmark: false,
 
